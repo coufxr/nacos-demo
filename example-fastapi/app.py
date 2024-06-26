@@ -4,8 +4,8 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import Depends, FastAPI
 
-from nacos import init_nacos
 from settings import Settings, get_settings
+from .nacos import init_nacos
 
 logger = logging.getLogger(__name__)
 
@@ -21,9 +21,9 @@ app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 async def root(settings: Settings = Depends(get_settings)):
-    logger.error(settings)
+    logger.info(settings)
     return {
-        "message": "Hello World",
+        "message": "fastapi",
         "settings": settings,
     }
 
@@ -34,4 +34,4 @@ async def say_hello(key: str, settings: Settings = Depends(get_settings)):
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
